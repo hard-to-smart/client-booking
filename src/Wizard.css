@@ -1,0 +1,4 @@
+.form-wizard .form-wizard-step.is-active .form-wizard-step-icon,
+.form-wizard .form-wizard-step:not(.is-active) .form-wizard-step-icon {
+  background-color: #fff; /* Replace this with your desired color */
+}
