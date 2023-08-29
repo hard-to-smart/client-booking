@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Page from './Layout/Page';
 import axios from 'axios';
+
 const Login = () => {
     const [loginDetails, setLoginDetails] = useState({});
     const [loginError , setLoginError] = useState('');
@@ -20,6 +21,7 @@ const Login = () => {
     
           if (response.data.msg === 'Login successful.') {
             alert('Login successful!');
+            localStorage.setItem('userEmail', loginDetails.email);
             window.location.href = '/Wizard'; // Redirect to the dashboard or desired page
           } else {
             setLoginError('Invalid email or password.');

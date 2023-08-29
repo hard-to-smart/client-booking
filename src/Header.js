@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Logo from './images/logo.png';
-import FaUserCircle, { FaRegUserCircle } from 'react-icons/fa';
-// import { Link } from 'react-router-dom';
+import  { FaBell, FaRegUserCircle } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const Header = () => {
@@ -92,11 +92,14 @@ const Header = () => {
       </div>
 
       <div className="flex items-center gap-3 cursor-pointer">
-
+{/* 
         <div>
           <button onClick={handleLanguageToggle} className="bg-slate-100 text-[#1e4d6c] text-[14px] font-bold rounded-[50%] px-2 py-1">
             {language === 'en' ? 'En' : 'Hi'}
           </button>
+        </div> */}
+        <div>
+         <Link to='/Status'> <FaBell size={26}/></Link>
         </div>
         <div onClick={handleToggleDropdown} className='relative flex flex-col'>
         <FaRegUserCircle size={28}/>

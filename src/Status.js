@@ -1,55 +1,64 @@
-import React from 'react'
-import Page from './Layout/Page'
-const Status = () => {
-  return (
-    <Page pageContent={(
-      <>
-    
-      <div class="flex flex-col justify-center items-center align-middle">
+import React, { useEffect, useState } from 'react';
+import Page from './Layout/Page';
+import './status.css';
+import axios from 'axios';
+const Status = () => { // Accept email as a prop
+  const [requests, setRequests] = useState([]);
  
-    <div class="inline-block w-full py-2  lg:px-8 ">
-      <div class="overflow-hidden">
-        <table class=" text-center text-sm font-light bg-purple-50 mx-auto w-full">
-          <thead
-            class="border-b bg-purple-100 font-medium dark:border-neutral-500 dark:text-neutral-800">
-            <tr>
-              <th scope="col" class=" px-6 py-4">Request ID</th>
-              <th scope="col" class=" px-6 py-4">Date</th>
-              <th scope="col" class=" px-6 py-4">Time</th>
-              <th scope="col" class=" px-6 py-4">Status</th>
-              <th scope="col" class=" px-6 py-4">Comments</th>
-
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="border-b dark:border-neutral-500">
-              <td class="whitespace-nowrap  px-6 py-4 font-medium">1</td>
-              <td class="whitespace-nowrap  px-6 py-4">Mark</td>
-              <td class="whitespace-nowrap  px-6 py-4">Otto</td>
-              <td class="whitespace-nowrap  px-6 py-4">@mdo</td>
-            </tr>
-            <tr class="border-b dark:border-neutral-500">
-              <td class="whitespace-nowrap  px-6 py-4 font-medium">2</td>
-              <td class="whitespace-nowrap  px-6 py-4 ">Jacob</td>
-              <td class="whitespace-nowrap  px-6 py-4">Thornton</td>
-              <td class="whitespace-nowrap  px-6 py-4">@fat</td>
-            </tr>
-            <tr class="border-b dark:border-neutral-500">
-              <td class="whitespace-nowrap  px-6 py-4 font-medium">3</td>
-              <td colspan="2" class="whitespace-nowrap  px-6 py-4">
-                Larry the Bird
-              </td>
-              <td class="whitespace-nowrap  px-6 py-4">@twitter</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+  useEffect(() => {
+    const userEmail = localStorage.getItem('userEmail'); // Retrieve the email from localStorage
+  
+    // Fetch data using userEmail from backend API
+    const fetchRequests = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/getClientRequirementsforStatus', { params: { userEmail } });
+        setRequests(response.data);
+      } catch (error) {
+        console.error('Error fetching requests:', error);
+      }
+    };
     
-  </div>
-</div>
-   
-    </>)}/>
-  )
-}
+    fetchRequests();
+  }, []);
+  return (
+    <Page
+      pageContent={(
+        <div className="row">
+          <div className="w-full">
+            <div className="card flex-fill">
+              <div className="card-header">
+                <h5 className="card-title mb-4">Status</h5>
+              </div>
+              <table className="table table-hover my-0 w-full text-center">
+                <thead>
+                  <tr>
+                    <th className="d-xl-table-cell">Request ID</th>
+                    <th className="d-xl-table-cell">Request Date</th>
+                    <th className="d-xl-table-cell">Event Date</th>
+                    <th className="d-xl-table-cell">Status</th>
+                    <th className="d-md-table-cell">Assignee</th>
+                    <th className="d-md-table-cell">Comments</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {requests.map((request) => (
+                    <tr key={request._id} className="border-b dark:border-neutral-500">
+                      <td className="whitespace-nowrap px-6 py-4 font-medium">{request._id}</td>
+                      <td className="whitespace-nowrap px-6 py-4">{new Date(request.requestDate).toDateString()}</td>
+                      <td className="whitespace-nowrap px-6 py-4">{new Date(request.date).toDateString()}</td>
+                      <td className="whitespace-nowrap px-6 py-4">{request.status}</td>
+                      <td className="whitespace-nowrap px-6 py-4">{request.assignee || '-'}</td>
+                      <td className="whitespace-nowrap px-6 py-4">{request.comments || '-'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+    />
+  );
+};
 
-export default Status
+export default Status;
